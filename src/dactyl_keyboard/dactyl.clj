@@ -11,8 +11,8 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 4)
-(def ncols 6)
+(def nrows 3)
+(def ncols 5)
 
 (def column-curvature (deg2rad 17))                         ; 15                        ; curvature of the columns
 (def row-curvature (deg2rad 6))                             ; 5                   ; curvature of the rows
@@ -47,8 +47,8 @@
 ;; General variables ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(def lastrow (dec nrows))
-(def cornerrow (dec lastrow))
+(def lastrow nrows)
+(def cornerrow  2)
 (def lastcol (dec ncols))
 
 ;;;;;;;;;;;;;;;;;
@@ -227,8 +227,7 @@
   (apply union
          (for [column columns
                row rows
-               :when (or (.contains [2 3] column)
-                         (not= row lastrow))]
+               ]
            (->> shape
                 (key-place column row)))))
 (def key-holes
@@ -489,12 +488,16 @@
     (wall-brace (partial key-place 0 cornerrow) -1 0 web-post-bl thumb-m-place 0 1 web-post-tl)
     ; left-back-corner
     (key-wall-brace 0 0 0 1 web-post-tl 0 0 -1 0 web-post-tl)
+
     ; front wall
-    (key-wall-brace 3 lastrow 0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
-    (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 0.5 -1 web-post-bl)
+    ; (key-wall-brace 3 lastrow 0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
+    ; (key-wall-brace 1 lastrow 0.5 -1 web-post-br 4 cornerrow 0.5 -1 web-post-bl)
     (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x cornerrow 0 -1 web-post-br)) ; TODO fix extra wall
     (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
+
+    ;(wall-brace thumb-r-place 0 -1 web-post-br (partial key-place 3 lastrow) 0 -1 web-post-bl)
     (wall-brace thumb-r-place 0 -1 web-post-br (partial key-place 3 lastrow) 0 -1 web-post-bl)
+
     ; thumb walls
     (wall-brace thumb-r-place 0 -1 web-post-br thumb-r-place 0 -1 web-post-bl)
     (wall-brace thumb-m-place 0 -1 web-post-br thumb-m-place 0 -1 web-post-bl)
